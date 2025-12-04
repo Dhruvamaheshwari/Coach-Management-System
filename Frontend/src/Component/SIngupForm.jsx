@@ -32,6 +32,10 @@ const SignupForm = ({ setIsloggin }) => {
     setIsloggin(true);
     nav('/dashbord');
   }
+    function handleBack()
+  {
+    nav(-1)
+  }
 
   return (
     <div className="w-full h-screen flex items-center justify-center  
@@ -44,7 +48,7 @@ const SignupForm = ({ setIsloggin }) => {
 
         {/* ⭐ FIXED ROLE SELECTION */}
         <div className="flex w-full mb-6 border rounded-lg overflow-hidden">
-          
+
           <button
             type="button"
             onClick={() => setAccountType("student")}
@@ -163,6 +167,12 @@ const SignupForm = ({ setIsloggin }) => {
 
           <button className="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold shadow-md transition">
             Create Account
+          </button>
+          {/* Back BUTTON */}
+          <button onClick={handleBack}
+            className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg 
+                     font-semibold shadow-md transition">
+            Back
           </button>
         </form>
       </div>

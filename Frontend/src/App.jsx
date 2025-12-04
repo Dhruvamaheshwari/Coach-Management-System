@@ -7,6 +7,7 @@ import Dashbord from "./Pages/Dashbord"
 import NavBar from "./Component/NavBar"
 import MaintenanceTask from "./Component/DashbordComponent/MaintenanceTask"
 import { useEffect, useState } from "react"
+import LandingPage from "./Pages/LandingPage"
 
 function App() {
 
@@ -59,7 +60,8 @@ const [AddMaintenace , setAddMaintenace] = useState([]);
       <NavBar isloggin={isloggin} setIsloggin={setIsloggin} />
 
       <Routes>
-        <Route path="/" element={<Home TotalCoach={TotalCoach} ActiveCoach={ActiveCoach} MaintenanceDueCoach={MaintenanceDueCoach} OutOfSericeCoach={OutOfSericeCoach} />} />
+        <Route path="/" element={<LandingPage/>} />
+        <Route path="/home" element={<Home TotalCoach={TotalCoach} ActiveCoach={ActiveCoach} MaintenanceDueCoach={MaintenanceDueCoach} OutOfSericeCoach={OutOfSericeCoach} />} />
         <Route path="/maintenance" element={<MaintenanceTask AddMaintenaceData={AddMaintenaceData} AddMaintenace={AddMaintenace}/>} />
         <Route path="/login" element={<Login setIsloggin={setIsloggin} />} />
         <Route path="/singup" element={<Singup setIsloggin={setIsloggin} />} />

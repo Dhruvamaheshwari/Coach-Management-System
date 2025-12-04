@@ -31,7 +31,12 @@ const LoginForm = ({ setIsloggin }) => {
   function submitHandler(e) {
     e.preventDefault();
     setIsloggin(true);
-    nva("/dashbord");
+    nva("/home");
+  }
+
+  function handleBack()
+  {
+    nva(-1)
   }
    return (
     <div className="w-full h-screen flex items-center justify-center relative overflow-hidden  bg-white/90">
@@ -96,9 +101,14 @@ const LoginForm = ({ setIsloggin }) => {
         {/* LOGIN BUTTON */}
         <button
           className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg 
-                     font-semibold shadow-md transition"
-        >
+                     font-semibold shadow-md transition">
           Log In
+        </button>
+         {/* Back BUTTON */}
+        <button onClick={handleBack}
+          className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg 
+                     font-semibold shadow-md transition">
+          Back 
         </button>
       </form>
     </div>
