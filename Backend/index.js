@@ -1,10 +1,28 @@
 const express = require("express")
 const app = express()
-const port = 4000;
+
+// import the Port into the .env file;
+require('dotenv').config();
+const port = process.env.PORT || 3000;
 
 
+// call the dbconnect function to connect the mongoDB
+const dbconnect = require('./Config/db');
+dbconnect();
+
+// use the pre-build Middleware
+app.use(express.json());
+
+
+// import the router and mount
+const UserRouter = require("./route/UserRouter");
+app.use('/api/v1' , UserRouter);
+
+// this is the default router
 app.get('/' , (req , res)=>{
     res.send('hello jiii kya haal chaal')
 })
 
+
+// server start
 app.listen(port , ()=> console.log(`server is started at ${port}`))
