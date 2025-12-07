@@ -8,7 +8,8 @@ const SignupForm = ({ setIsloggin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConPassword, setShowConPassword] = useState(false);
 
-  const [accountType, setAccountType] = useState("student");
+  // Renamed to department and initialized with a default empty value or the first option
+  const [department, setDepartment] = useState("");
 
   const [formdata, setFormData] = useState({
     firstName: "",
@@ -16,9 +17,16 @@ const SignupForm = ({ setIsloggin }) => {
     email: "",
     password: "",
     confirmPassword: "",
+    // Added department to the form data
+    department: "",
   });
 
   function changeHandler(e) {
+    // Update both formdata and the local department state if the department select changes
+    if (e.target.name === "department") {
+      setDepartment(e.target.value);
+    }
+
     setFormData((pre) => ({
       ...pre,
       [e.target.name]: e.target.value,
@@ -27,6 +35,12 @@ const SignupForm = ({ setIsloggin }) => {
 
   function submitHandler(e) {
     e.preventDefault();
+    // 💡 Add your actual form validation (e.g., password match) and API call here.
+
+    // For demonstration, logging the form data:
+    console.log("Signup Data Submitted:", formdata);
+
+    // Placeholder: Successful signup redirects
     setIsloggin(true);
     nav("/dashbord");
   }
@@ -38,34 +52,36 @@ const SignupForm = ({ setIsloggin }) => {
   return (
     <div className="w-full flex flex-col gap-5 animate-fadeIn ">
 
-      {/* ⭐ Account Type Tabs (Matches Template Style) */}
-      <div className="flex w-full border rounded-lg overflow-hidden bg-gray-200">
-        <button
-          type="button"
-          onClick={() => setAccountType("student")}
-          className={`w-1/2 py-3 font-semibold transition 
-            ${
-              accountType === "student"
-                ? "bg-indigo-600 text-white"
-                : "text-gray-700 hover:bg-gray-300"
-            }`}
-        >
-          Student
-        </button>
+      {/* ⭐ Department Select Dropdown (New Element) */}
+      <label className="flex flex-col gap-1">
+        <p className="text-gray-700 font-semibold">
+          Department/Role <sup className="text-red-500">*</sup>
+        </p>
 
-        <button
-          type="button"
-          onClick={() => setAccountType("instructor")}
-          className={`w-1/2 py-3 font-semibold transition 
-            ${
-              accountType === "instructor"
-                ? "bg-indigo-600 text-white"
-                : "text-gray-700 hover:bg-gray-300"
-            }`}
+        <select
+          name="department"
+          required
+          value={formdata.department}
+          onChange={changeHandler}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg 
+            bg-white/70 focus:ring-2 focus:ring-indigo-500 appearance-none"
         >
-          Instructor
-        </button>
-      </div>
+          <option value="" disabled>
+            Select your Department/Role
+          </option>
+          {/* Your new options */}
+          <option value="Admin">Admin</option>
+          <option value="Mechanical">Mechanical</option>
+          <option value="Electrical">Electrical</option>
+          <option value="Signal & Telecom">Signal & Telecom</option>
+          <option value="Carriage & Wagon">Carriage & Wagon</option>
+          <option value="Traction">Traction</option>
+          <option value="Operations">Operations</option>
+          <option value="Engineering">Engineering</option>
+          <option value="Railway Safety">Railway Safety</option>
+          <option value="Maintenance">Maintenance</option>
+        </select>
+      </label>
 
       {/* ⭐ FORM START */}
       <form onSubmit={submitHandler} className="flex flex-col gap-5">

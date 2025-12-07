@@ -55,7 +55,7 @@ const NavBar = ({ isloggin, setIsloggin }) => {
                                         : "text-gray-300 hover:text-white hover:bg-gray-700"
                                         }`}
                                 >
-                                    Contact
+                                    About Us
                                 </Link>
 
                             </>
