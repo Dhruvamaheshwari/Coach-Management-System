@@ -36,6 +36,7 @@ exports.singup = async (req, res) => {
         //  create the user in the database [ using the function ( .create ) ]
         const userCreate = await User.create({ first_name, last_name, email, password:hashpassword, role });
         return res.status(200).json({ succ: true, user: userCreate, mess: 'user is created' });
+        
     } catch (err) {
         console.log(err)
         return res.status(500).json({ mess: err, suss: false });

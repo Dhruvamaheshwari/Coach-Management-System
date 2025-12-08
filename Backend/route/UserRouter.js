@@ -10,7 +10,5 @@ const {singup , login} = require("../Controller/AuthUser");
 router.post("/singup" , singup);
 router.post("/login" , login)
 
-
-
 // export the router
 module.exports = router

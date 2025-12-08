@@ -24,7 +24,17 @@ const UserSchema = new Schema ({
     },
     role:{
         type:String,
-        enum:["Admin" , "Maintainer"]
+        enum:["admin",
+            "mechanical",
+            "electrical",
+            "signal_telecom",
+            "carriage_wagon",
+            "traction",
+            "operations",
+            "engineering",
+            "railway_safety",
+            "maintenance"],
+        require:true,
     }
 })
 

@@ -17,7 +17,11 @@ app.use(express.json());
 
 // import the router and mount
 const UserRouter = require("./route/UserRouter");
+const TaskRouter = require("./route/TaskRouter");
+const CoachRouter = require("./route/CoachRouter");
 app.use('/api/v1' , UserRouter);
+app.use('/api/v1' , TaskRouter);
+app.use('/api/v1' , CoachRouter);
 
 // this is the default router
 app.get('/' , (req , res)=>{

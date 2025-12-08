@@ -1,0 +1,39 @@
+const {Schema, model} = require('mongoose')
+
+
+// to crate the Coach Scheme
+
+const CoachSchema = new Schema ({
+    coachNo:{
+        type:String,
+        required : true,
+        unique:true,
+    },
+    coachtype:{
+        type:String,
+        required:true,
+    },
+    depot:{
+        type:String,
+        required:true,
+    },
+    satus:{
+        type:String,
+        enum:['active' , "under maintenance" , 'out of service'],
+    },
+    lasrMaintenace:
+    {
+        type:Date,
+        required:true,
+    },
+    nextDueDate:{
+        type:Date,
+        required:true,
+    }
+})
+
+// to create the model;
+const Coach = model("Coach" , CoachSchema);
+
+// to export the model
+module.exports = Coach;
