@@ -12,18 +12,18 @@ const SignupForm = ({ setIsloggin }) => {
   const [department, setDepartment] = useState("");
 
   const [formdata, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
-    confirmPassword: "",
-    // Added department to the form data
-    department: "",
+    confirmPassword:"",
+    // Added role to the form data
+    role: "",
   });
 
   function changeHandler(e) {
     // Update both formdata and the local department state if the department select changes
-    if (e.target.name === "department") {
+    if (e.target.name === "role") {
       setDepartment(e.target.value);
     }
 
@@ -33,16 +33,47 @@ const SignupForm = ({ setIsloggin }) => {
     }));
   }
 
-  function submitHandler(e) {
+  // function submitHandler(e) {
+  //   e.preventDefault();
+  //   // For demonstration, logging the form data:
+  //   console.log("Signup Data Submitted:", formdata);
+  //   // Placeholder: Successful signup redirects
+  //   setIsloggin(true);
+  //   nav("/dashbord");
+  // }
+  async function submitHandler(e) {
     e.preventDefault();
-    // 💡 Add your actual form validation (e.g., password match) and API call here.
 
-    // For demonstration, logging the form data:
-    console.log("Signup Data Submitted:", formdata);
 
-    // Placeholder: Successful signup redirects
+    // check the password and conformpassword match or not
+    if (formdata.password !== formdata.confirmPassword) {
+      alert("password is not correct");
+      return;
+    }
+
+    // send data to backend;
+    try {
+      const res = await fetch("http://localhost:4000/api/v1/singup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formdata), // send the all formdata to backend;
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || "Signup failed");
+        return;
+      }
+
+      alert("Account created successfully!");
     setIsloggin(true);
-    nav("/dashbord");
+    nav("/home");
+
+    } catch (err) {
+      console.error("Signup Error:", err);
+    }
+
   }
 
   function handleBack() {
@@ -59,9 +90,9 @@ const SignupForm = ({ setIsloggin }) => {
         </p>
 
         <select
-          name="department"
+          name="role"
           required
-          value={formdata.department}
+          value={formdata.role}
           onChange={changeHandler}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg 
             bg-white/70 focus:ring-2 focus:ring-indigo-500 appearance-none"
@@ -70,16 +101,16 @@ const SignupForm = ({ setIsloggin }) => {
             Select your Department/Role
           </option>
           {/* Your new options */}
-          <option value="Admin">Admin</option>
-          <option value="Mechanical">Mechanical</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Signal & Telecom">Signal & Telecom</option>
-          <option value="Carriage & Wagon">Carriage & Wagon</option>
-          <option value="Traction">Traction</option>
-          <option value="Operations">Operations</option>
-          <option value="Engineering">Engineering</option>
-          <option value="Railway Safety">Railway Safety</option>
-          <option value="Maintenance">Maintenance</option>
+          <option value="admin">Admin</option>
+          <option value="mechanical">Mechanical</option>
+          <option value="electrical">Electrical</option>
+          <option value="signal_telecom">Signal & Telecom</option>
+          <option value="carriage_wagon">Carriage & Wagon</option>
+          <option value="traction">Traction</option>
+          <option value="operations">Operations</option>
+          <option value="engineering">Engineering</option>
+          <option value="railway_safety">Railway Safety</option>
+          <option value="maintenance">Maintenance</option>
         </select>
       </label>
 
@@ -95,9 +126,9 @@ const SignupForm = ({ setIsloggin }) => {
 
             <input
               type="text"
-              name="firstName"
+              name="first_name"
               required
-              value={formdata.firstName}
+              value={formdata.first_name}
               onChange={changeHandler}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg 
               bg-white/70 focus:ring-2 focus:ring-indigo-500"
@@ -111,9 +142,9 @@ const SignupForm = ({ setIsloggin }) => {
 
             <input
               type="text"
-              name="lastName"
+              name="last_name"
               required
-              value={formdata.lastName}
+              value={formdata.last_name}
               onChange={changeHandler}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg 
               bg-white/70 focus:ring-2 focus:ring-indigo-500"

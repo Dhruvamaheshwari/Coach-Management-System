@@ -56,7 +56,7 @@ exports.login = async (req, res) => {
 
         // create the payload
         const payload = {
-            emai:userEnter.email,
+            email:userEnter.email,
             id:userEnter._id,
             role:userEnter.role,
         }

@@ -15,6 +15,15 @@ dbconnect();
 app.use(express.json());
 
 
+//!___________________________TO connect the frontend________________________________
+// to connect the frontend and backend usign the CORS
+// import the CORS
+const cors = require('cors');
+app.use(cors({
+    origin:'http://localhost:5173',
+    credentials: true,
+}))
+
 // import the router and mount
 const UserRouter = require("./route/UserRouter");
 const TaskRouter = require("./route/TaskRouter");
@@ -27,7 +36,6 @@ app.use('/api/v1' , CoachRouter);
 app.get('/' , (req , res)=>{
     res.send('hello jiii kya haal chaal')
 })
-
 
 // server start
 app.listen(port , ()=> console.log(`server is started at ${port}`))

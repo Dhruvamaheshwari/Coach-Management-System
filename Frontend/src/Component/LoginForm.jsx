@@ -22,10 +22,43 @@ const LoginForm = ({ setIsloggin }) => {
     }));
   }
 
-  function submitHandler(e) {
+  // function submitHandler(e) {
+  //   e.preventDefault();
+  //   setIsloggin(true);
+  //   nva("/home");
+  // }
+
+  //!_________________________________________TO Connect the backend________________________________
+  async function submitHandler(e) {
     e.preventDefault();
-    setIsloggin(true);
-    nva("/home");
+    try {
+      const res = await fetch("http://localhost:4000/api/v1/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)   // { email, password }
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // show error to user
+        alert(data.message || "Login failed");
+        return;
+      }
+
+      // If backend returned token
+      if (data.token) {
+        localStorage.setItem("token", data.token); // optional
+      }
+
+      // You can also use data.user if backend returned user object
+      setIsloggin(true);
+      nva("/home");
+
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("Something went wrong. Try again.");
+    }
   }
 
   function handleBack() {
