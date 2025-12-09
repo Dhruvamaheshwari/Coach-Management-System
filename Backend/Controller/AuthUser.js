@@ -13,7 +13,6 @@ require('dotenv').config();
 
 
 // This is for the Singup page;
-//todo -> Singup is done only left is the jwt and password hash
 exports.singup = async (req, res) => {
     try {
         // get data;
@@ -44,7 +43,6 @@ exports.singup = async (req, res) => {
 }
 
 // This is for the Login page
-//todo -> login is done only auth is left
 exports.login = async (req, res) => {
     try {
         // get the data
