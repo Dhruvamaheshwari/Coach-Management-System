@@ -1,5 +1,4 @@
 // to connect the database using the mongoose;
-
 const mongoose = require("mongoose")
 
 // to load the url in the .env file
@@ -11,4 +10,5 @@ const dbconnect = () =>{
     .catch((err)=>console.log(err))
 }
 
+// export the file
 module.exports =  dbconnect
