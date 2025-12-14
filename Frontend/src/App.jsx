@@ -22,6 +22,27 @@ function App() {
   function AddCoachData(coachData) {
     setAddCoach((pre) => [...pre, coachData])
   }
+
+  // FETCH DATA FROM MONGODB WHEN PAGE LOADS
+  useEffect(() => {
+    const fetchCoaches = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/api/v1/allcoach");
+        const data = await res.json();
+
+        if (res.ok) {
+          setAddCoach(data.coaches); // <-- STORE DB DATA HERE
+        } else {
+          console.log("Error:", data.message);
+        }
+      } catch (err) {
+        console.log("Fetch Error:", err);
+      }
+    };
+
+    fetchCoaches();
+  }, []);
+
   const [TotalCoach, setTotalCoach] = useState(0)
   const [ActiveCoach, setActiveCoach] = useState(0)
   const [MaintenanceDueCoach, setMaintenanceDueCoach] = useState(0)
@@ -33,9 +54,9 @@ function App() {
     let undermaintenance = 0;
     let out = 0;
     CoachLength.map((coach) => {
-      if (coach.status === "Active")
+      if (coach.status === "active")
         active++
-      else if (coach.status === "Under Maintenance")
+      else if (coach.status === "under maintenance")
         undermaintenance++
       else
         out++
@@ -56,16 +77,35 @@ function App() {
   function AddMaintenaceData(MaintenanceData) {
     setAddMaintenace((pre) => [...pre, MaintenanceData])
   }
+    // FETCH DATA FROM MONGODB WHEN PAGE LOADS
+  useEffect(() => {
+    const fetchTask = async () => {
+      try {
+        const res = await fetch("http://localhost:4000/api/v1/alltaskdata");
+        const data = await res.json();
+
+        if (res.ok) {
+          setAddMaintenace(data.tasks); // <-- STORE DB DATA HERE
+        } else {
+          console.log("Error:", data.message);
+        }
+      } catch (err) {
+        console.log("Fetch Error:", err);
+      }
+    };
+
+    fetchTask();
+  }, []);
 
 
   //!_______________________________________Coach updata____________________________________________
   function UpdateCoachData(id, updatedData) {
-  setAddCoach((prev) => {
-    const newArr = [...prev];
-    newArr[id] = updatedData;
-    return newArr;
-  });
-}
+    setAddCoach((prev) => {
+      const newArr = [...prev];
+      newArr[id] = updatedData;
+      return newArr;
+    });
+  }
 
 
   return (
@@ -79,9 +119,9 @@ function App() {
         <Route path="/login" element={<Login setIsloggin={setIsloggin} />} />
         <Route path="/singup" element={<Singup setIsloggin={setIsloggin} />} />
         <Route path="/coachprofile" element={<Dashbord AddCoachData={AddCoachData} AddCoach={AddCoach} CountCoachData={CountCoachData} />} />
-        <Route path="/coach/:id" element={<CoachDetailsPage AddCoach={AddCoach} UpdateCoachData={UpdateCoachData} />}/>
-        <Route path="/departments" element={<DepartmentDashboard AddMaintenance={AddMaintenace} />} 
-/>
+        <Route path="/coach/:id" element={<CoachDetailsPage AddCoach={AddCoach} UpdateCoachData={UpdateCoachData} />} />
+        <Route path="/departments" element={<DepartmentDashboard AddMaintenance={AddMaintenace} />}
+        />
       </Routes>
 
 

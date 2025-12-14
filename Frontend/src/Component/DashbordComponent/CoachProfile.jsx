@@ -3,8 +3,6 @@ import CoachInputForm from './CoachInputForm'
 import CoachOutputForm from './CoachOutputForm'
 const CoachProfile = ({CountCoachData , AddCoachData , AddCoach}) => {
 
-
-
   return (
     <div>
         <CoachInputForm AddCoachData={AddCoachData}/>

@@ -5,9 +5,9 @@ const Task = require('../model/task')
 exports.TaskData = async (req, res) => {
     try {
         // to take the data from the body;
-        const { seleteCoach, task, priority, department, assignedBy, description } = req.body;
+        const { selectCoach, task, priority, department, assignedBy, description } = req.body;
 
-        const CreateTask = await Task.create({ seleteCoach, task, priority, department, assignedBy, description })
+        const CreateTask = await Task.create({ selectCoach, task, priority, department, assignedBy, description })
         return res.status(200).json({ succ: true, coach: CreateTask, mess: 'coach is created' })
 
     } catch (err) {
@@ -16,7 +16,7 @@ exports.TaskData = async (req, res) => {
     }
 }
 
-
+// to get all the task 
 exports.AllTask = async (req, res) => {
     try {
         const tasks = await Task.find()

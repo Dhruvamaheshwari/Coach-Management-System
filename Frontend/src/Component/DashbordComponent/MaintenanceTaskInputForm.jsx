@@ -1,27 +1,82 @@
 /** @format */
 
-import React, { useRef, useState } from "react";
-import coachListData from "../../DataFile/CoachListData";
+import React, { useEffect, useRef, useState } from "react";
+
 const MaintenanceTaskInputForm = ({ AddMaintenaceData }) => {
     const [showForm, setShowForm] = useState(false);
 
+    // to show all the coach in the dropdown
+    const [coachList, setCoachList] = useState([]);
+
+    // GET ALL COACHES FROM DATABASE
+    useEffect(() => {
+        async function fetchCoaches() {
+            try {
+                const res = await fetch("http://localhost:4000/api/v1/allcoach");
+                const data = await res.json();
+
+                if (res.ok) {
+                    setCoachList(data.coaches); // Save in state
+                }
+            } catch (err) {
+                console.log("Fetch Coach Error:", err);
+            }
+        }
+
+        fetchCoaches();
+    }, []);
+
+    // INPUT REFS
     let coach = useRef();
     let title = useRef();
     let priority = useRef();
     let department = useRef();
     let description = useRef();
 
-    function submitHandler(e) {
+    // SUBMIT HANDLER
+    async function submitHandler(e) {
         e.preventDefault();
+
+        // GET userId from localStorage
+        let userId = localStorage.getItem("userId");
+        console.log("User ID:", userId);
+
+        // If no login → stop task creation
+        if (!userId) {
+            alert("User not logged in. Please login again.");
+            return;
+        }
+
         let MaintenanceData = {
-            coach: coach.current.value,
-            title: title.current.value,
+            selectCoach: coach.current.value,
+            task: title.current.value,
             priority: priority.current.value,
-            department:department.current.value,
+            department: department.current.value,
             description: description.current.value,
+            assignedBy: userId, // Fixed
         };
-        AddMaintenaceData(MaintenanceData)
-        setShowForm(false);
+
+        try {
+            const res = await fetch("http://localhost:4000/api/v1/taskdata", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(MaintenanceData),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                alert(data.message || "Task is not created");
+                return;
+            }
+
+            AddMaintenaceData(MaintenanceData);
+            setShowForm(false);
+            alert("Task is created");
+
+        } catch (err) {
+            console.error("Task Error:", err);
+        }
     }
 
     return (
@@ -29,7 +84,8 @@ const MaintenanceTaskInputForm = ({ AddMaintenaceData }) => {
             {/* OPEN BUTTON */}
             <button
                 onClick={() => setShowForm(true)}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+            >
                 + Create Task
             </button>
 
@@ -37,12 +93,10 @@ const MaintenanceTaskInputForm = ({ AddMaintenaceData }) => {
             {showForm && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
                     <div className="bg-white w-[600px] rounded-2xl shadow-xl p-8 animate-fadeIn">
-                        {/* TITLE */}
                         <h2 className="text-2xl font-bold mb-6 text-gray-900">
                             Create Maintenance Task
                         </h2>
 
-                        {/* FORM */}
                         <form onSubmit={submitHandler} className="space-y-5">
                             {/* SELECT COACH */}
                             <div>
@@ -52,13 +106,12 @@ const MaintenanceTaskInputForm = ({ AddMaintenaceData }) => {
                                 <select
                                     name="coach"
                                     required
-                                    //   value={formData.coach}
                                     ref={coach}
-                                    //   onChange={changeHandler}
-                                    className="w-full mt-1 p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500">
+                                    className="w-full mt-1 p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500"
+                                >
                                     <option value="">-- Select Coach --</option>
-                                    {coachListData.map((coach, i) => (
-                                        <option key={i} value={coach.coachNumber}>
+                                    {coachList.map((coach) => (
+                                        <option key={coach._id} value={coach._id}>
                                             {coach.coachNumber} ({coach.type})
                                         </option>
                                     ))}
@@ -72,9 +125,7 @@ const MaintenanceTaskInputForm = ({ AddMaintenaceData }) => {
                                     type="text"
                                     name="title"
                                     required
-                                    // value={formData.title}
                                     ref={title}
-                                    // onChange={changeHandler}
                                     className="w-full mt-1 p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
@@ -84,35 +135,35 @@ const MaintenanceTaskInputForm = ({ AddMaintenaceData }) => {
                                 <label className="text-gray-700 font-medium">Priority</label>
                                 <select
                                     name="priority"
-                                    // value={formData.priority}
                                     ref={priority}
-                                    // onChange={changeHandler}
-                                    className="w-full mt-1 p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500">
-                                    <option>Low</option>
-                                    <option>Medium</option>
-                                    <option>High</option>
-                                    <option>Critical</option>
+                                    className="w-full mt-1 p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="critical">Critical</option>
                                 </select>
                             </div>
+
                             {/* DEPARTMENT */}
                             <div>
                                 <label className="text-gray-700 font-medium">Department</label>
                                 <select
                                     name="department"
-                                    ref={department}  // <-- create a useRef like priority
-                                    className="w-full mt-1 p-3 border rounded-lg bg-gray-50 
-                   focus:ring-2 focus:ring-blue-500"
+                                    ref={department}
+                                    className="w-full mt-1 p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="">Select Department</option>
-                                    <option>Mechanical</option>
-                                    <option>Electrical</option>
-                                    <option>Signal & Telecom</option>
-                                    <option>Carriage & Wagon</option>
-                                    <option>Traction</option>
-                                    <option>Operations</option>
-                                    <option>Engineering</option>
-                                    <option>Railway Safety</option>
-                                    <option>Maintenance</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="mechanical">Mechanical</option>
+                                    <option value="electrical">Electrical</option>
+                                    <option value="signal_telecom">Signal & Telecom</option>
+                                    <option value="carriage_wagon">Carriage & Wagon</option>
+                                    <option value="traction">Traction</option>
+                                    <option value="operations">Operations</option>
+                                    <option value="engineering">Engineering</option>
+                                    <option value="railway_safety">Railway Safety</option>
+                                    <option value="maintenance">Maintenance</option>
                                 </select>
                             </div>
 
@@ -121,10 +172,9 @@ const MaintenanceTaskInputForm = ({ AddMaintenaceData }) => {
                                 <label className="text-gray-700 font-medium">Description</label>
                                 <textarea
                                     name="description"
-                                    // value={formData.description}
                                     ref={description}
-                                    // onChange={changeHandler}
-                                    className="w-full mt-1 p-3 border rounded-lg bg-gray-50 h-28 focus:ring-2 focus:ring-blue-500"></textarea>
+                                    className="w-full mt-1 p-3 border rounded-lg bg-gray-50 h-28 focus:ring-2 focus:ring-blue-500"
+                                ></textarea>
                             </div>
 
                             {/* BUTTONS */}
@@ -132,13 +182,15 @@ const MaintenanceTaskInputForm = ({ AddMaintenaceData }) => {
                                 <button
                                     type="button"
                                     onClick={() => setShowForm(false)}
-                                    className="px-6 py-2 text-gray-600 hover:text-gray-800">
+                                    className="px-6 py-2 text-gray-600 hover:text-gray-800"
+                                >
                                     Cancel
                                 </button>
 
                                 <button
                                     type="submit"
-                                    className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700">
+                                    className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700"
+                                >
                                     Assign Task
                                 </button>
                             </div>

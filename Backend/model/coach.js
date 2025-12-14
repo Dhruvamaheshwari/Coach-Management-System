@@ -4,12 +4,13 @@ const {Schema, model} = require('mongoose')
 // to crate the Coach Scheme
 
 const CoachSchema = new Schema ({
-    coachNo:{
+    coachNumber:{
         type:String,
         required : true,
-        unique:true,
+        unique: true,  // Add unique constraint
+        trim: true,    // Remove whitespace
     },
-    coachtype:{
+    type:{
         type:String,
         required:true,
     },
@@ -17,16 +18,16 @@ const CoachSchema = new Schema ({
         type:String,
         required:true,
     },
-    satus:{
+    status:{
         type:String,
         enum:['active' , "under maintenance" , 'out of service'],
     },
-    lasrMaintenace:
+    lastMaintenance:
     {
         type:Date,
         required:true,
     },
-    nextDueDate:{
+    nextDue:{
         type:Date,
         required:true,
     }

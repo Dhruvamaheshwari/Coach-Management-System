@@ -55,11 +55,11 @@ const CoachOutputForm = ({ AddCoach, CountCoachData }) => {
 
                   <td className="p-4">
                     <span
+                    // to show the all coach form the database
                       className={`px-3 py-1 rounded-full text-sm text-white 
-                        ${
-                          coach.status === "Active"
-                            ? "bg-green-500"
-                            : coach.status === "Under Maintenance"
+    ${coach.status === "active"
+                          ? "bg-green-500"
+                          : coach.status === "under maintenance"
                             ? "bg-yellow-500"
                             : "bg-red-500"
                         }`}
@@ -68,8 +68,8 @@ const CoachOutputForm = ({ AddCoach, CountCoachData }) => {
                     </span>
                   </td>
 
-                  <td className="p-4">{coach.lastMaintenance}</td>
-                  <td className="p-4">{coach.nextDue}</td>
+                  <td className="p-4">{coach.lastMaintenance?.slice(0, 10)}</td>
+                  <td className="p-4">{coach.nextDue?.slice(0, 10)}</td>
                 </tr>
               ))
             )}

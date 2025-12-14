@@ -3,7 +3,7 @@ const app = express()
 
 // import the Port into the .env file;
 require('dotenv').config();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 
 // call the dbconnect function to connect the mongoDB
