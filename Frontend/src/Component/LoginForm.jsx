@@ -35,6 +35,7 @@ const LoginForm = ({ setIsloggin }) => {
       const res = await fetch("http://localhost:4000/api/v1/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // ye isliye jisse cookie browser pr dikhe
         body: JSON.stringify(formData)   // { email, password }
       });
 

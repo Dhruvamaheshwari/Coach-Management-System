@@ -14,6 +14,9 @@ dbconnect();
 // use the pre-build Middleware
 app.use(express.json());
 
+/*  ADD THESE TWO LINES */
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 //!___________________________TO connect the frontend________________________________
 // to connect the frontend and backend usign the CORS
@@ -28,9 +31,11 @@ app.use(cors({
 const UserRouter = require("./route/UserRouter");
 const TaskRouter = require("./route/TaskRouter");
 const CoachRouter = require("./route/CoachRouter");
+const auth = require("./route/authRouter")
 app.use('/api/v1' , UserRouter);
 app.use('/api/v1' , TaskRouter);
 app.use('/api/v1' , CoachRouter);
+app.use('/api/v1' , auth);
 
 // this is the default router
 app.get('/' , (req , res)=>{

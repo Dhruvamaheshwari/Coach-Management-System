@@ -33,3 +33,34 @@ exports.AllTask = async (req, res) => {
         return res.status(500).json({ mess: err.message, succ: false });
     }
 }
+
+// to delete the Task;
+exports.DeleteTask = async (req, res) => {
+  try {
+    //! patams se isliye liya h kyuki hum isme axious use kr rhe h to vo data url se send krta h ;
+    const { id } = req.params;
+    console.log(req.params)
+
+    const deletedTask = await Task.findByIdAndDelete(id);
+
+    if (!deletedTask) {
+      return res.status(404).json({
+        success: false,
+        message: "Task not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Task deleted successfully",
+      data: deletedTask,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Task is not deleted",
+    });
+  }
+};
+

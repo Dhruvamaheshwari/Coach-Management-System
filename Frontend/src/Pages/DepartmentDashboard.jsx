@@ -1,23 +1,36 @@
 import React from "react";
 
-const DepartmentDashboard = ({ AddMaintenance }) => {
-  // Count tasks for each department
+const DepartmentDashboard = ({ AddMaintenance ,countTask , completed}) => {
+
+  // Department-wise count
   const departmentCount = {
-    Mechanical: 0,
-    Electrical: 0,
-    "Signal & Telecom": 0,
-    "Carriage & Wagon": 0,
-    Traction: 0,
-    Operations: 0,
-    Engineering: 0,
-    "Railway Safety": 0,
-    Maintenance: 0,
+    mechanical: 0,
+    electrical: 0,
+    signal_telecom: 0,
+    carriage_wagon: 0,
+    traction: 0,
+    operations: 0,
+    engineering: 0,
+    railway_safety: 0,
+    maintenance: 0,
   };
 
-  // Loop through all maintenance tasks
+  // Status-wise count
+  const statusCount = {
+    pending: 0,
+    "in-progress": 0,
+    completed: 0,
+  };
+
+  // Loop through tasks
+  //! to show the department on the browser fetch from the database;
   AddMaintenance.forEach((task) => {
-    if (task.department) {
+    if (task.department && departmentCount[task.department] !== undefined) {
       departmentCount[task.department]++;
+    }
+
+    if (task.status && statusCount[task.status] !== undefined) {
+      statusCount[task.status]++;
     }
   });
 
@@ -25,18 +38,21 @@ const DepartmentDashboard = ({ AddMaintenance }) => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
+
+      {/* ================= Department Section ================= */}
       <h1 className="text-3xl font-bold text-gray-800 mb-6">
         Department Status Overview
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {departments.map((dept, i) => (
           <div
             key={i}
-            className="bg-white shadow-lg rounded-xl p-6 border border-gray-200 hover:shadow-xl transition"
+            className="bg-white shadow-lg rounded-xl p-6 border hover:shadow-xl transition"
           >
-            <h2 className="text-xl font-semibold text-gray-700">{dept}</h2>
+            <h2 className="text-xl font-semibold text-gray-700 capitalize">
+              {dept.replace("_", " ")}
+            </h2>
 
             <p className="mt-3 text-5xl font-bold text-blue-600">
               {departmentCount[dept]}
@@ -45,6 +61,30 @@ const DepartmentDashboard = ({ AddMaintenance }) => {
             <p className="text-gray-500 mt-1 text-sm">Total Tasks</p>
           </div>
         ))}
+      </div>
+
+      {/* ================= Task Status Section ================= */}
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+        Task Progress Overview
+      </h1>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+
+        {/* Pending */}
+        <div className="bg-white shadow-lg rounded-xl p-6 border">
+          <h2 className="text-xl font-semibold text-gray-700">Pending</h2>
+          <p className="mt-3 text-5xl font-bold text-yellow-500">
+            {countTask}
+          </p>
+        </div>
+
+        {/* Completed */}
+        <div className="bg-white shadow-lg rounded-xl p-6 border">
+          <h2 className="text-xl font-semibold text-gray-700">Completed</h2>
+          <p className="mt-3 text-5xl font-bold text-green-500">
+            {completed}
+          </p>
+        </div>
 
       </div>
     </div>

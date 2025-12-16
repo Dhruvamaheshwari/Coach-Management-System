@@ -1,8 +1,29 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = ({ isloggin, setIsloggin }) => {
     const location = useLocation();
+
+    //! this is for the delete the cookis
+    const navigate = useNavigate();
+    const handleLogout = async () => {
+        try {
+            await axios.post(
+                "http://localhost:4000/api/v1/logout",
+                {},
+                { withCredentials: true }
+            );
+
+            localStorage.removeItem("isLoggedIn");
+            setIsloggin(false);
+            navigate("/");
+        } catch (err) {
+            console.log("Logout error", err);
+        }
+    };
+
 
     return (
         <div className="w-full bg-gray-900 text-white shadow-lg sticky top-0 z-50 ">
@@ -108,13 +129,18 @@ const NavBar = ({ isloggin, setIsloggin }) => {
                     {/* LOGOUT + Coach Profile Buttons (when logged in) */}
                     {isloggin && (
                         <>
-                            <Link to="/">
-                                <button
+                            {/* <Link to="/"> */}
+                            <button
+                                onClick={handleLogout}
+                                className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 transition text-white shadow">
+                                Logout
+                            </button>
+                            {/* <button
                                     onClick={() => setIsloggin(false)}
                                     className="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 transition text-white shadow">
                                     Logout
-                                </button>
-                            </Link>
+                                </button> */}
+                            {/* </Link> */}
                         </>
                     )}
                 </div>

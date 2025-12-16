@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react'
 
-const MaintenanceTaskOutputForm = ({AddMaintenace}) => {
+const MaintenanceTaskOutputForm = ({AddMaintenace , ContTask , deleteTask}) => {
+
+  // TO FIND COUNT OF THE TASK;
+  ContTask(AddMaintenace);
 return (
     <div className="p-6">
 
@@ -25,11 +28,11 @@ return (
                 {/* PRIORITY TAG */}
                 <span
                   className={`px-3 py-1 text-sm font-medium rounded-lg ${
-                    task.priority === "High"
+                    task.priority === "high"
                       ? "bg-red-100 text-red-600"
-                      : task.priority === "Medium"
+                      : task.priority === "medium"
                       ? "bg-blue-100 text-blue-600"
-                      : task.priority === "Critical"
+                      : task.priority === "critical"
                       ? "bg-purple-100 text-purple-700"
                       : "bg-yellow-100 text-yellow-700"
                   }`}
@@ -38,11 +41,11 @@ return (
                 </span>
                                 <span
                   className={`px-3 py-1 text-sm font-medium rounded-lg ${
-                    task.priority === "High"
+                    task.priority === "high"
                       ? "bg-red-100 text-red-600"
-                      : task.priority === "Medium"
+                      : task.priority === "medium"
                       ? "bg-blue-100 text-blue-600"
-                      : task.priority === "Critical"
+                      : task.priority === "critical"
                       ? "bg-purple-100 text-purple-700"
                       : "bg-yellow-100 text-yellow-700"
                   }`}
@@ -71,12 +74,15 @@ return (
               </p>
 
               {/* FOOTER WITH STATUS */}
-              <div className="mt-6 border-t pt-3">
+              {/* <div className="mt-6 border-t pt-3">
                 <select className="text-gray-700 border rounded-lg px-3 py-2">
                   <option>Pending</option>
                   <option>In Progress</option>
                   <option>Completed</option>
                 </select>
+              </div> */}
+              <div className="mt-6 border-t pt-3 flex justify-center">
+                <button onClick={()=>deleteTask(task._id)} className="text-gray-700 border rounded-lg px-3 py-2 cursor-pointer bg-green-300 w-50 ">Done</button>
               </div>
 
             </div>

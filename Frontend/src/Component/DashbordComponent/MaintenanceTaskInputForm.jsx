@@ -154,7 +154,6 @@ const MaintenanceTaskInputForm = ({ AddMaintenaceData }) => {
                                     className="w-full mt-1 p-3 border rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="">Select Department</option>
-                                    <option value="admin">Admin</option>
                                     <option value="mechanical">Mechanical</option>
                                     <option value="electrical">Electrical</option>
                                     <option value="signal_telecom">Signal & Telecom</option>

@@ -66,7 +66,7 @@ exports.login = async (req, res) => {
         if(match)
         {
             // to creat the jwt token
-            let token = jwt.sign(payload , process.env.JWT_TOCKEN , {expiresIn:'2h'})
+            let token = jwt.sign(payload , process.env.JWT_TOKEN , {expiresIn:'2h'})
 
             // to creatr the object of token to intreact the mongoDB
             const userobj = userEnter.toObject();
@@ -77,12 +77,12 @@ exports.login = async (req, res) => {
                 expires:new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
                 httpOnly:true,
             }
-            
             return res.cookie("token" , token , option).status(200).json(
                 {success:true , 
                 token , 
                 userobj ,
                 message:"User logged In"})
+                    
         }
         else
         {
@@ -94,3 +94,14 @@ exports.login = async (req, res) => {
     }
 }
 
+// Log out route
+exports.logout = (req, res) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+    });
+
+    return res.status(200).json({
+        success: true,
+        message: "Logged out successfully",
+    });
+};

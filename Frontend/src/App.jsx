@@ -1,5 +1,6 @@
 
 import { Route, Routes } from "react-router-dom"
+import axios from 'axios'
 import Home from "./Pages/Home"
 import Login from "./Pages/Login"
 import Singup from "./Pages/Singup"
@@ -10,11 +11,38 @@ import { useEffect, useState } from "react"
 import LandingPage from "./Pages/LandingPage"
 import CoachDetailsPage from "./Pages/CoachDetailsPage"
 import DepartmentDashboard from "./Pages/DepartmentDashboard"
+// import ProtectedRoute from "./Pages/ProtectedRoute"
 
 function App() {
 
   //!_______________________________This is the Login_____________________________________
   const [isloggin, setIsloggin] = useState(false)
+
+  const [authLoading, setAuthLoading] = useState(true);
+  // CHECK LOGIN ON PAGE REFRESH
+  // ! page reresh hone ke baad cookies ki help se check krta h ki use login h ki nhi cookis hoti h to aapne app login ho jata h refersh krne ke baad pr kisi ne logout kiya hoga to cookis remove ho gai hogi to vo bina login kiye dashboard p nhi jaa sakta h 
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:4000/api/v1/me",
+          { withCredentials: true }
+        );
+
+        if (res.data.loggedIn) {
+          setIsloggin(true);
+        } else {
+          setIsloggin(false);
+        }
+      } catch (err) {
+        setIsloggin(false);
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
 
   //!________________________________This is the Coach Profile_________________________________
@@ -77,7 +105,13 @@ function App() {
   function AddMaintenaceData(MaintenanceData) {
     setAddMaintenace((pre) => [...pre, MaintenanceData])
   }
-    // FETCH DATA FROM MONGODB WHEN PAGE LOADS
+  // to count the task;
+  const [countTask, setCountTask] = useState(0);
+  function ContTask(TaskNo) {
+    // console.log(TaskNo.length);
+    setCountTask(TaskNo.length);
+  }
+  // FETCH DATA FROM MONGODB WHEN PAGE LOADS
   useEffect(() => {
     const fetchTask = async () => {
       try {
@@ -97,6 +131,21 @@ function App() {
     fetchTask();
   }, []);
 
+  // usestat for the completed task;
+  const [completed, setCompleted] = useState(0);
+
+  // delete function for the Task
+  function deleteTask(index) {
+    // we can use the axios to delete the data from the database;
+    axios.delete(`http://localhost:4000/api/v1/deletetask/${index}`)
+      .then(() => {
+        // setAddMaintenace((pre) => pre.filter(task => task._id !== index));
+        setAddMaintenace((pre) => pre.filter((v) => v._id !== index));
+        setCompleted(completed + 1);
+      })
+
+  }
+
 
   //!_______________________________________Coach updata____________________________________________
   function UpdateCoachData(id, updatedData) {
@@ -107,24 +156,99 @@ function App() {
     });
   }
 
+  /* ===================== LOADING STATE ===================== */
+  if (authLoading) {
+    return <div className="text-center mt-20 text-xl">Checking login...</div>;
+  }
 
   return (
     <div>
       <NavBar isloggin={isloggin} setIsloggin={setIsloggin} />
 
       <Routes>
+
+        {/* this is old route */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<Home TotalCoach={TotalCoach} ActiveCoach={ActiveCoach} MaintenanceDueCoach={MaintenanceDueCoach} OutOfSericeCoach={OutOfSericeCoach} />} />
-        <Route path="/maintenance" element={<MaintenanceTask AddMaintenaceData={AddMaintenaceData} AddMaintenace={AddMaintenace} />} />
+        <Route path="/maintenance" element={<MaintenanceTask AddMaintenaceData={AddMaintenaceData} AddMaintenace={AddMaintenace} ContTask={ContTask} deleteTask={deleteTask} />} />
         <Route path="/login" element={<Login setIsloggin={setIsloggin} />} />
         <Route path="/singup" element={<Singup setIsloggin={setIsloggin} />} />
         <Route path="/coachprofile" element={<Dashbord AddCoachData={AddCoachData} AddCoach={AddCoach} CountCoachData={CountCoachData} />} />
         <Route path="/coach/:id" element={<CoachDetailsPage AddCoach={AddCoach} UpdateCoachData={UpdateCoachData} />} />
-        <Route path="/departments" element={<DepartmentDashboard AddMaintenance={AddMaintenace} />}
+        <Route path="/departments" element={<DepartmentDashboard AddMaintenance={AddMaintenace} countTask={countTask} completed={completed} />}
         />
+
+        {/* ⁡⁢⁣⁢this is the new Route use in future⁡ */}
+        {/* <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute isloggin={isloggin}>
+              <Home
+                TotalCoach={TotalCoach}
+                ActiveCoach={ActiveCoach}
+                MaintenanceDueCoach={MaintenanceDueCoach}
+                OutOfSericeCoach={OutOfSericeCoach}
+              />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/maintenance"
+          element={
+            <ProtectedRoute isloggin={isloggin}>
+              <MaintenanceTask
+                AddMaintenaceData={AddMaintenaceData}
+                AddMaintenace={AddMaintenace}
+                ContTask={ContTask}
+                deleteTask={deleteTask}
+              />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/login" element={<Login setIsloggin={setIsloggin} />} />
+        <Route path="/singup" element={<Singup setIsloggin={setIsloggin} />} />
+
+        <Route
+          path="/coachprofile"
+          element={
+            <ProtectedRoute isloggin={isloggin}>
+              <Dashbord
+                AddCoachData={AddCoachData}
+                AddCoach={AddCoach}
+                CountCoachData={CountCoachData}
+              />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/coach/:id"
+          element={
+            <ProtectedRoute isloggin={isloggin}>
+              <CoachDetailsPage
+                AddCoach={AddCoach}
+                UpdateCoachData={UpdateCoachData}
+              />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/departments"
+          element={
+            <ProtectedRoute isloggin={isloggin}>
+              <DepartmentDashboard
+                AddMaintenance={AddMaintenace}
+                countTask={countTask}
+                completed={completed}
+              />
+            </ProtectedRoute>
+          }
+        /> */}
       </Routes>
-
-
 
 
     </div>
