@@ -23,7 +23,7 @@ exports.singup = async (req, res) => {
 
         if (userexist)
             return res.status(400).json({ succ: false, mess: 'user is already singup pls login' })
-
+        
         // secure password
         let hashpassword;
         try{

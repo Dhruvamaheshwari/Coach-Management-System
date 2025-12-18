@@ -56,6 +56,7 @@ const SignupForm = ({ setIsloggin }) => {
       const res = await fetch("http://localhost:4000/api/v1/singup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // ye isliye jisse cookie browser pr dikhe
         body: JSON.stringify(formdata), // send the all formdata to backend;
       });
 
