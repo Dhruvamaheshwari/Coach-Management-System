@@ -7,8 +7,8 @@ import Singup from "./Pages/Singup"
 import Dashbord from "./Pages/Dashbord"
 import NavBar from "./Component/NavBar"
 import MaintenanceTask from "./Component/DashbordComponent/MaintenanceTask"
+import ContactPage from "./Pages/LandingPage"
 import { useEffect, useState } from "react"
-import LandingPage from "./Pages/LandingPage"
 import CoachDetailsPage from "./Pages/CoachDetailsPage"
 import DepartmentDashboard from "./Pages/DepartmentDashboard"
 // import ProtectedRoute from "./Pages/ProtectedRoute"
@@ -168,7 +168,7 @@ function App() {
       <Routes>
 
         {/* this is old route */}
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<ContactPage />} />
         <Route path="/home" element={<Home TotalCoach={TotalCoach} ActiveCoach={ActiveCoach} MaintenanceDueCoach={MaintenanceDueCoach} OutOfSericeCoach={OutOfSericeCoach} />} />
         <Route path="/maintenance" element={<MaintenanceTask AddMaintenaceData={AddMaintenaceData} AddMaintenace={AddMaintenace} ContTask={ContTask} deleteTask={deleteTask} />} />
         <Route path="/login" element={<Login setIsloggin={setIsloggin} />} />

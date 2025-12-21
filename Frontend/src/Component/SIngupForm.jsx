@@ -67,8 +67,7 @@ const SignupForm = ({ setIsloggin }) => {
       }
 
       alert("Account created successfully!");
-    setIsloggin(true);
-    nav("/home");
+      nav("/login");
 
     } catch (err) {
       console.error("Signup Error:", err);

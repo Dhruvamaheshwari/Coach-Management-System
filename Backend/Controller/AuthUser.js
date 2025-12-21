@@ -44,55 +44,71 @@ exports.singup = async (req, res) => {
 
 // This is for the Login page
 exports.login = async (req, res) => {
-    try {
-        // get the data
-        const { email, password } = req.body;
+  try {
+    // 1️⃣ Get data from request body
+    const { email, password } = req.body;
 
-        // to check email is presnt or not in the database
-        const userEnter = await User.findOne({ email });
-
-        if (!userEnter)
-            return res.status(400).json({ succ: false, mess: "you are not loign pls login first" })
-
-        // create the payload
-        const payload = {
-            email:userEnter.email,
-            id:userEnter._id,
-            role:userEnter.role,
-        }
-
-        // to decode the password using the compare  fun. and match the password
-        const match = await bcrypt.compare(password , userEnter.password);
-        if(match)
-        {
-            // to creat the jwt token
-            let token = jwt.sign(payload , process.env.JWT_TOKEN , {expiresIn:'2h'})
-
-            // to creatr the object of token to intreact the mongoDB
-            const userobj = userEnter.toObject();
-            userobj.token = token;
-            userobj.password = null;
-
-            const option = {
-                expires:new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-                httpOnly:true,
-            }
-            return res.cookie("token" , token , option).status(200).json(
-                {success:true , 
-                token , 
-                userobj ,
-                message:"User logged In"})
-                    
-        }
-        else
-        {
-             return res.status(500).json({success:false , message:"Incorrect password"})
-        }
-    } catch (err) {
-        console.log(err)
-        return res.status(500).json({ succ: false, mess: err })
+    // 2️⃣ Check if user exists
+    const userEnter = await User.findOne({ email });
+    if (!userEnter) {
+      return res.status(400).json({
+        success: false,
+        message: "Please create your account",
+      });
     }
-}
+
+    // 3️⃣ Compare password
+    const match = await bcrypt.compare(password, userEnter.password);
+    if (!match) {
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password",
+      });
+    }
+
+    // 4️⃣ Create JWT payload
+    const payload = {
+      id: userEnter._id,
+      email: userEnter.email,
+      role: userEnter.role,
+    };
+
+    // 5️⃣ Generate JWT token
+    const token = jwt.sign(payload, process.env.JWT_TOKEN, {
+      expiresIn: "2h",
+    });
+
+    // 6️⃣ Prepare user object (remove password)
+    const userobj = userEnter.toObject();
+    userobj.password = undefined;
+    userobj.token = token;
+
+    // 7️⃣ Cookie options
+    const options = {
+      httpOnly: true,
+      expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+    };
+
+    // 8️⃣ Send response
+    return res
+      .cookie("token", token, options)
+      .status(200)
+      .json({
+        success: true,
+        message: "User logged in successfully",
+        token,
+        userobj,
+      });
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: "Server error during login",
+    });
+  }
+};
+
 
 // Log out route
 exports.logout = (req, res) => {

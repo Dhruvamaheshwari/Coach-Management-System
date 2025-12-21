@@ -31,38 +31,38 @@ const LoginForm = ({ setIsloggin }) => {
   //!_________________________________________TO Connect the backend________________________________
   async function submitHandler(e) {
     e.preventDefault();
+
     try {
       const res = await fetch("http://localhost:4000/api/v1/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // ye isliye jisse cookie browser pr dikhe
-        body: JSON.stringify(formData)   // { email, password }
+        credentials: "include",
+        body: JSON.stringify(formData), // { email, password }
       });
 
       const data = await res.json();
+      console.log("Login data", data);
 
+      // ❗ If backend sends error status
       if (!res.ok) {
-        // show error to user
-        alert(data.message || "Login failed");
+        alert(data.message);
         return;
       }
 
-      // this is the inbuld the function to store the value in local
-      if (data.userobj && data.userobj._id) {
-        localStorage.setItem("userId", data.userobj._id);
+      // ✅ Use "user" (not userobj)
+      if (data.user && data.user._id) {
+        localStorage.setItem("userId", data.user._id);
       }
-      // console.log(data.userobj._id);
 
-      // You can also use data.user if backend returned user object
       setIsloggin(true);
-
       nva("/home");
 
     } catch (err) {
-      console.log("Login error:", err);
+      console.error("Login error:", err);
       alert("Something went wrong. Try again.");
     }
   }
+
 
   function handleBack() {
     nva(-1);
