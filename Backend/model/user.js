@@ -36,9 +36,21 @@ const UserSchema = new Schema({
             "maintenance"],
         require: true,
     },
-    Railway_Id:{
-        type:String,
+    Railway_Id: {
+        type: String,
         require: true,
+    },
+    // TIME TRACKING
+    lastLoginAt: Date,
+    lastLogoutAt: Date,
+    totalWorkTime: {
+        type: Number, // in milliseconds
+        default: 0,
+    },
+    status: {
+        type: String,
+        enum: ["online", "offline"],
+        default: "offline",
     },
 })
 

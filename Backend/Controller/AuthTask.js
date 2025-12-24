@@ -131,8 +131,7 @@ exports.PendingTasks = async (req, res) => {
   try {
     const tasks = await Task.find({ status: "PENDING" })
       .populate("selectCoach")
-      .populate("assignedBy", "first_name email")
-      
+      .populate("assignedBy", "first_name last_name email")
 
     return res.status(200).json({
       success: true,
@@ -163,8 +162,8 @@ exports.ApproveTask = async (req, res) => {
       { new: true }
     )
       .populate("selectCoach", "name email")
-      .populate("assignedBy", "first_name email")
-      .populate("approvedBy", "first_name email");
+      .populate("assignedBy", "first_name last_name email")
+      .populate("approvedBy", "first_name last_name email");
 
     if (!task) {
       return res.status(404).json({

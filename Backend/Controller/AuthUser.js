@@ -71,6 +71,13 @@ exports.login = async (req, res) => {
                 .status(400)
                 .json({ succ: false, mess: "you are not loign pls login first" });
 
+        //  SAVE LOGIN TIME
+        userEnter.lastLoginAt = new Date();
+        
+        userEnter.status = "online"; // USER IS ONLINE
+        await userEnter.save();
+
+
         // create the payload
         const payload = {
             email: userEnter.email,
@@ -109,16 +116,50 @@ exports.login = async (req, res) => {
 };
 
 // Log out route
-exports.logout = (req, res) => {
-    res.clearCookie("token", {
-        httpOnly: true,
-    });
+// exports.logout = (req, res) => {
 
-    return res.status(200).json({
-        success: true,
-        message: "Logged out successfully",
-    });
+
+//     res.clearCookie("token", {
+//         httpOnly: true,
+//     });
+
+//     return res.status(200).json({
+//         success: true,
+//         message: "Logged out successfully",
+//     });
+// };
+exports.logout = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user)
+            return res.status(404).json({ success: false, message: "User not found" });
+
+        const lastLogoutAt = new Date();
+        user.lastLogoutAt = lastLogoutAt;
+            user.status = "offline"; //  USER IS OFFLINE
+
+            // if (!user.totalWorkTime) user.totalWorkTime = 0;
+        // ⏱ CALCULATE SESSION TIME
+        if (user.lastLoginAt) {
+            const sessionTime =
+                lastLogoutAt.getTime() - user.lastLoginAt.getTime();
+                user.totalWorkTime += sessionTime;
+        }
+
+        await user.save();
+
+        res.clearCookie("token");
+
+        res.json({
+            success: true,
+            message: "Logout successful",
+            sessionTimeMs: user.totalWorkTime,
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
 };
+
 
 // Super admin controller
 exports.createSuperAdmin = async (req, res) => {

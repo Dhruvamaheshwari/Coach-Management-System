@@ -11,7 +11,7 @@ const {AdminAuth, isadmin} = require('../middleware/AdminAuth');
 // to create the route
 router.post("/singup", AdminAuth ,isadmin , singup);
 router.post("/login" , login)
-router.post("/logout" , logout)
+router.post("/logout",AdminAuth , logout)
 
 // export the router
 module.exports = router

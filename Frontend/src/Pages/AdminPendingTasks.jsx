@@ -16,7 +16,6 @@ const AdminPendingTasks = () => {
         );
 
         const data = await res.json();
-
         if (res.ok) {
           setPendingTasks(data.tasks);
         }
@@ -111,19 +110,23 @@ const AdminPendingTasks = () => {
 
               {/* TITLE */}
               <h2 className="text-xl font-bold text-blue-800 mb-2">
-                {task.task}
+                Title: {task.task}
               </h2>
 
               {/* DESCRIPTION */}
-              <p className="text-gray-700 mb-4 text-sm">
-                {task.description}
+              <p className="text-gray-700 mb-4 text-lg font-bold">
+                Problem: {task.description}
               </p>
 
               {/* COACH INFO */}
               <div className="text-sm text-gray-700 mb-4">
                 <p>
                   <strong>Coach:</strong>{" "}
-                  {task.selectCoach?.coachNumber}
+                  {task.selectCoach.coachNumber}
+                </p>
+                <p>
+                  <strong>Created_By:</strong>{" "}
+                  {task.assignedBy.first_name.toUpperCase()} {task.assignedBy.last_name.toUpperCase()}
                 </p>
                 <p>
                   <strong>Type:</strong>{" "}
