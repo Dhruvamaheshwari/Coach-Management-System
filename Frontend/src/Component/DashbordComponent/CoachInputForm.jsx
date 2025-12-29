@@ -1,17 +1,16 @@
 /** @format */
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 const CoachInputForm = ({ AddCoachData }) => {
   const [showForm, setShowForm] = useState(false);
-
 
   let coachNumber = useRef();
   let type = useRef();
   let depot = useRef();
   let status = useRef();
-  let lastMaintenance = useRef();
-  let nextDue = useRef();
+  // dates are system-managed; no refs for them
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -21,11 +20,11 @@ const CoachInputForm = ({ AddCoachData }) => {
       type: type.current.value,
       depot: depot.current.value,
       status: status.current.value,
-      lastMaintenance: lastMaintenance.current.value,
-      nextDue: nextDue.current.value,
+      // dates are system-managed: last maintenance = today, next due = +1 month
+      // server will set lastMaintenance = now and nextDue = +1 month
     };
 
-    // to join the backend 
+    // to join the backend
     try {
       const res = await fetch("http://localhost:4000/api/v1/coachdata", {
         method: "POST",
@@ -34,19 +33,17 @@ const CoachInputForm = ({ AddCoachData }) => {
       });
 
       const data = await res.json();
-      // console.log(data.CoachCreate);
 
       if (!res.ok) {
-        alert(data.message || "Coach is not created");
+        toast.error(data.mess || data.message || "Coach is not created");
         return;
       }
 
-      // console.log("Saved Coach Data:", coachData.length);
-
       setShowForm(false);
-      AddCoachData(coachData);
+      // use the coach object returned from server (contains _id)
+      AddCoachData(data.coach || coachData);
 
-      alert("Coach is created");
+      toast.success("Coach is created");
     } catch (err) {
       console.error("Coach Error:", err);
     }
@@ -133,32 +130,9 @@ const CoachInputForm = ({ AddCoachData }) => {
                   </select>
                 </div>
 
-                <div>
-                  <p className="font-medium text-gray-700">
-                    Last Maintenance Date
-                  </p>
-                  <input
-                    type="date"
-                    name="lastMaintenance"
-                    //   value={coachData.lastMaintenance}
-                    ref={lastMaintenance}
-                    // onChange={handleChange}
-                    className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <p className="font-medium text-gray-700">Next Due Date</p>
-                  <input
-                    type="date"
-                    name="nextDue"
-                    //   value={coachData.nextDue}
-                    ref={nextDue}
-                    // onChange={handleChange}
-                    className="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
+                <div className="text-sm text-gray-600">
+                  Dates are set automatically on creation: last maintenance =
+                  today, next due = +1 month.
                 </div>
 
                 {/* Buttons */}

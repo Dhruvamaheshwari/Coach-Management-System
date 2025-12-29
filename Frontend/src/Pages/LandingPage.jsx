@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
+import { toast } from 'react-toastify';
 
 const statsInit = [
   { id: 1, label: "Coaches Managed", value: 124 },
@@ -31,6 +32,14 @@ export default function LandingPage() {
 
     return () => timers.forEach((t) => cancelAnimationFrame(t));
   }, []);
+
+    //     useEffect(() => {
+    //   toast.success("You are logged out", {
+    //     position: "top-right",
+    //     autoClose: 2000,
+    //     theme: "dark",
+    //   });
+    // }, []);
 
   return (
     <div
@@ -69,7 +78,7 @@ export default function LandingPage() {
 
             <div className="flex flex-wrap gap-3 mt-4">
               <a
-                href="/singup"
+                href="/login"
                 className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-lg shadow transition">
                 Get Started
                 <svg
