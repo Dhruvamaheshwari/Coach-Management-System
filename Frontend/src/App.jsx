@@ -1,7 +1,7 @@
 /** @format */
 
 import { Route, Routes } from "react-router-dom";
-import { ToastContainer} from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 import axios from "axios";
 import Home from "./Pages/Home";
 import Login from "./Pages/Login";
@@ -186,7 +186,7 @@ function App() {
         role={role}
         user={user}
       />
-      <ToastContainer/>
+      <ToastContainer />
 
       <Routes>
         {/* this is old route */}
@@ -241,6 +241,8 @@ function App() {
                 AddCoachData={AddCoachData}
                 AddCoach={AddCoach}
                 CountCoachData={CountCoachData}
+                role={role}
+                user={user}
               />
             </ProtectedRoute>
           }
