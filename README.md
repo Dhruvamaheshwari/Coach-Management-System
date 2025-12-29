@@ -2,380 +2,177 @@
 
 # RailCoach Management System
 
-A comprehensive Railway Coach Management System built with React (Frontend) and Node.js/Express (Backend). This application helps manage railway coaches, maintenance tasks, and user authentication for railway operations.
+A Railway Coach Management System built with React (Vite) for the frontend and Node.js/Express with MongoDB for the backend. This repo contains everything needed to run and develop the application locally: user authentication, coach management, maintenance tasks, and admin features.
 
-## 🚀 Features
+## Quick links
 
-### Frontend Features
+- Frontend: [Frontend](Frontend)
+- Backend: [Backend](Backend)
 
-- **User Authentication**: Login and Signup functionality
-- **Coach Management**: Add, view, and manage railway coaches
-- **Maintenance Tasks**: Create and track maintenance tasks for coaches
-- **Dashboard**: View statistics and overview of coaches and tasks
-- **Department Management**: Manage different railway departments
-- **Responsive UI**: Modern and responsive design using Tailwind CSS
+## Key features
 
-### Backend Features
+- User authentication (signup/login) with JWT
+- Coach CRUD and profile pages
+- Create and track maintenance tasks
+- Role-based access for admins and department users
+- Dashboard with charts and summaries
 
-- **RESTful API**: Well-structured API endpoints
-- **User Authentication**: JWT-based authentication with password hashing
-- **Database Integration**: MongoDB for data persistence
-- **Coach Management**: CRUD operations for coaches
-- **Task Management**: Create and retrieve maintenance tasks
-- **Secure Password Storage**: Bcrypt for password hashing
+## Tech stack
 
-## 🛠️ Tech Stack
+- Frontend: React, Vite, React Router, Tailwind CSS
+- Backend: Node.js, Express, MongoDB, Mongoose
+- Auth: JSON Web Tokens (JWT), bcrypt for password hashing
+- Dev tools: nodemon, dotenv
 
-### Frontend
+## Project structure
 
-- **React** (v19.2.0) - UI library
-- **React Router DOM** (v7.10.0) - Routing
-- **Tailwind CSS** (v4.1.17) - Styling
-- **Vite** (v7.2.4) - Build tool
-- **React Icons** (v5.5.0) - Icons
-- **Recharts** (v3.5.1) - Charts and graphs
-
-### Backend
-
-- **Node.js** - Runtime environment
-- **Express** (v5.2.1) - Web framework
-- **MongoDB** - Database
-- **Mongoose** (v9.0.0) - ODM for MongoDB
-- **JWT** (v9.0.3) - Authentication tokens
-- **Bcrypt** (v6.0.0) - Password hashing
-- **dotenv** (v17.2.3) - Environment variables
-
-## 📁 Project Structure
+Top-level layout (important files and folders):
 
 ```
 React+Node/
-├── Backend/
-│   ├── Config/
-│   │   └── db.js                 # Database connection
-│   ├── Controller/
-│   │   ├── AuthUser.js           # User authentication logic
-│   │   ├── AuthCoach.js          # Coach management logic
-│   │   └── AuthTask.js           # Task management logic
-│   ├── model/
-│   │   ├── user.js               # User schema
-│   │   ├── coach.js              # Coach schema
-│   │   └── task.js               # Task schema
-│   ├── route/
-│   │   ├── UserRouter.js         # User routes
-│   │   ├── CoachRouter.js        # Coach routes
-│   │   └── TaskRouter.js         # Task routes
-│   ├── middleware/               # Custom middleware
-│   ├── index.js                  # Server entry point
-│   └── package.json
-│
-├── Frontend/
-│   ├── src/
-│   │   ├── Component/
-│   │   │   ├── DashbordComponent/
-│   │   │   │   ├── CoachInputForm.jsx
-│   │   │   │   ├── CoachOutputForm.jsx
-│   │   │   │   ├── CoachProfile.jsx
-│   │   │   │   ├── MaintenanceTask.jsx
-│   │   │   │   ├── MaintenanceTaskInputForm.jsx
-│   │   │   │   └── MaintenanceTaskOutputForm.jsx
-│   │   │   ├── LoginForm.jsx
-│   │   │   ├── SIngupForm.jsx
-│   │   │   ├── NavBar.jsx
-│   │   │   └── Template.jsx
-│   │   ├── Pages/
-│   │   │   ├── Home.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Singup.jsx
-│   │   │   ├── Dashbord.jsx
-│   │   │   ├── LandingPage.jsx
-│   │   │   ├── CoachDetailsPage.jsx
-│   │   │   └── DepartmentDashboard.jsx
-│   │   ├── DataFile/
-│   │   │   └── CoachListData.js
-│   │   ├── App.jsx               # Main app component
-│   │   └── main.jsx              # Entry point
-│   ├── public/
-│   └── package.json
-│
-└── README.md
+├─ Backend/         # Express API, controllers, models, routes
+├─ Frontend/        # Vite + React application
+└─ README.md        # This file
 ```
 
-## 📋 Prerequisites
+See the folders `Frontend` and `Backend` for full structure and source files.
 
-Before you begin, ensure you have the following installed:
+## Prerequisites
 
-- **Node.js** (v14 or higher)
-- **npm** or **yarn**
-- **MongoDB** (local installation or MongoDB Atlas account)
-- **Git** (for cloning the repository)
+- Node.js v14 or newer
+- npm or yarn
+- MongoDB (local or Atlas)
 
-## 🔧 Installation
+## Setup
 
-### 1. Clone the Repository
+1. Clone the repository and open the project root:
 
 ```bash
 git clone <repository-url>
 cd React+Node
 ```
 
-### 2. Backend Setup
+2. Backend setup
 
 ```bash
-# Navigate to backend directory
 cd Backend
-
-# Install dependencies
 npm install
-
-# Create a .env file in the Backend directory
-touch .env
+# create .env (see Environment variables below)
 ```
 
-### 3. Frontend Setup
+3. Frontend setup
 
 ```bash
-# Navigate to frontend directory (from project root)
-cd Frontend
-
-# Install dependencies
+cd ../Frontend
 npm install
 ```
 
-## ⚙️ Environment Variables
+## Environment variables (Backend)
 
-Create a `.env` file in the `Backend` directory with the following variables:
+Create a `.env` file inside the `Backend` folder with at least:
 
-```env
-# Server Port
+```
 PORT=3000
-
-# MongoDB Connection URL
 MONGO_URL=mongodb://localhost:27017/railcoach
-# OR for MongoDB Atlas:
-# MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/railcoach?retryWrites=true&w=majority
-
-# JWT Secret Token
-JWT_TOCKEN=your_super_secret_jwt_token_here
+JWT_TOCKEN=your_jwt_secret_here
 ```
 
-**Note**: Replace `your_super_secret_jwt_token_here` with a strong, random string for production use.
+Replace values as appropriate. Do not commit `.env` to source control.
 
-## 🚀 Running the Application
+## Running the apps
 
-### Start the Backend Server
+Start the backend server (from `Backend`):
 
 ```bash
-# From the Backend directory
 cd Backend
 npm start
 ```
 
-The backend server will start on `http://localhost:3000` (or the port specified in your `.env` file).
-
-### Start the Frontend Development Server
+Start the frontend dev server (from `Frontend`):
 
 ```bash
-# From the Frontend directory (in a new terminal)
 cd Frontend
 npm run dev
 ```
 
-The frontend will start on `http://localhost:5173` (default Vite port).
+Default URLs:
 
-### Access the Application
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:3000
 
-Open your browser and navigate to:
+## API overview
 
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:3000
+Base path: `/api/v1`
 
-## 📡 API Endpoints
+- POST `/singup` — create a new user
+- POST `/login` — login and receive JWT (token stored in cookie)
 
-### Authentication Routes (`/api/v1`)
+Coach routes:
 
-| Method | Endpoint  | Description                  |
-| ------ | --------- | ---------------------------- |
-| POST   | `/singup` | Register a new user          |
-| POST   | `/login`  | Login user and get JWT token |
+- POST `/coachdata` — create a coach
 
-**Signup Request Body:**
+Task routes:
 
-```json
-{
-  "first_name": "John",
-  "last_name": "Doe",
-  "email": "john@example.com",
-  "password": "password123",
-  "role": "admin"
-}
-```
+- POST `/taskdata` — create maintenance task
+- GET `/alltaskdata` — list tasks
 
-**Login Request Body:**
+Request/response details and exact route handlers are implemented in `Backend/route` and `Backend/Controller`.
 
-```json
-{
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
+## Data models (summary)
 
-### Coach Routes (`/api/v1`)
+- User: `first_name`, `last_name`, `email`, `password` (hashed), `role`
+- Coach: `coachNo`, `coachtype`, `depot`, `satus`, `lasrMaintenace`, `nextDueDate`
+- Task: `selectCoach` (ref), `task`, `priority`, `department`, `assignedBy` (ref), `description`
 
-| Method | Endpoint     | Description        |
-| ------ | ------------ | ------------------ |
-| POST   | `/coachdata` | Create a new coach |
+## Authentication & Security
 
-**Create Coach Request Body:**
+- JWT tokens, stored as httpOnly cookies
+- Passwords hashed with bcrypt
+- Token expiry set in server code (commonly 2 hours)
 
-```json
-{
-  "coachNo": "C001",
-  "coachtype": "AC",
-  "depot": "Mumbai",
-  "satus": "active",
-  "lasrMaintenace": "2024-01-15",
-  "nextDueDate": "2024-04-15"
-}
-```
+## Scripts
 
-### Task Routes (`/api/v1`)
-
-| Method | Endpoint       | Description                   |
-| ------ | -------------- | ----------------------------- |
-| POST   | `/taskdata`    | Create a new maintenance task |
-| GET    | `/alltaskdata` | Get all maintenance tasks     |
-
-**Create Task Request Body:**
-
-```json
-{
-  "seleteCoach": "coach_id_here",
-  "task": "Engine Maintenance",
-  "priority": "high",
-  "department": "mechanical",
-  "assignedBy": "user_id_here",
-  "description": "Regular engine maintenance required"
-}
-```
-
-## 🗄️ Database Models
-
-### User Model
-
-- `first_name` (String, required)
-- `last_name` (String, required)
-- `email` (String, required, unique)
-- `password` (String, required, hashed)
-- `role` (String, enum: admin, mechanical, electrical, etc.)
-
-### Coach Model
-
-- `coachNo` (String, required, unique)
-- `coachtype` (String, required)
-- `depot` (String, required)
-- `satus` (String, enum: active, under maintenance, out of service)
-- `lasrMaintenace` (Date, required)
-- `nextDueDate` (Date, required)
-
-### Task Model
-
-- `selectCoach` (ObjectId, ref: Coach, required)
-- `task` (String, required)
-- `priority` (String, enum: low, medium, high, critical)
-- `department` (String, enum: admin, mechanical, electrical, etc.)
-- `assignedBy` (ObjectId, ref: User, required)
-- `description` (String)
-
-## 🎨 Frontend Routes
-
-| Route           | Component           | Description                 |
-| --------------- | ------------------- | --------------------------- |
-| `/`             | LandingPage         | Landing page                |
-| `/login`        | Login               | User login page             |
-| `/singup`       | Singup              | User registration page      |
-| `/home`         | Home                | Dashboard with statistics   |
-| `/coachprofile` | Dashbord            | Coach management dashboard  |
-| `/coach/:id`    | CoachDetailsPage    | Individual coach details    |
-| `/maintenance`  | MaintenanceTask     | Maintenance task management |
-| `/departments`  | DepartmentDashboard | Department overview         |
-
-## 🔐 Authentication
-
-The application uses JWT (JSON Web Tokens) for authentication:
-
-- Tokens are stored in HTTP-only cookies
-- Token expiration: 2 hours
-- Password hashing using bcrypt with 10 salt rounds
-
-## 📝 Available Scripts
-
-### Backend Scripts
+Backend (in `Backend`):
 
 ```bash
-npm start      # Start the server with nodemon (auto-restart on changes)
+npm start    # start server with nodemon
 ```
 
-### Frontend Scripts
+Frontend (in `Frontend`):
 
 ```bash
-npm run dev    # Start development server
-npm run build  # Build for production
-npm run preview # Preview production build
-npm run lint   # Run ESLint
+npm run dev
+npm run build
+npm run preview
+npm run lint
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
-### Backend Issues
+- Database connection errors: ensure MongoDB is running and `MONGO_URL` is correct
+- Port conflicts: update `PORT` in `.env` or stop the process using the port
+- Dependency issues: remove `node_modules` and `package-lock.json`, then `npm install`
 
-1. **Database Connection Error**
+## Contributing
 
-   - Verify MongoDB is running
-   - Check `MONGO_URL` in `.env` file
-   - Ensure MongoDB connection string is correct
+1. Fork the repo
+2. Create a branch: `git checkout -b feature/your-feature`
+3. Commit and push your changes
+4. Open a pull request
 
-2. **Port Already in Use**
-   - Change `PORT` in `.env` file
-   - Or stop the process using the port
-
-### Frontend Issues
-
-1. **Dependencies Not Installing**
-
-   - Delete `node_modules` and `package-lock.json`
-   - Run `npm install` again
-
-2. **Build Errors**
-   - Check Node.js version (should be v14+)
-   - Clear cache: `npm cache clean --force`
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
+## License
 
 This project is licensed under the ISC License.
 
-## 👤 Author
+## Author & Support
 
-Your Name
-
-## 🙏 Acknowledgments
-
-- React team for the amazing framework
-- Express.js for the robust backend framework
-- MongoDB for the flexible database solution
-- Tailwind CSS for the utility-first CSS framework
-
-## 📞 Support
-
-For support, email - dhruvamaheshwari0@gmail.com or create an issue in the repository.
+Author: Your Name
+For support: dhruvamaheshwari0@gmail.com
 
 ---
 
-**Note**: Make sure to keep your `.env` file secure and never commit it to version control. Add `.env` to your `.gitignore` file.
+If you'd like, I can also:
+
+- add a short `CONTRIBUTING.md`
+- create `.env.example` in `Backend`
+- commit and push this change for you
